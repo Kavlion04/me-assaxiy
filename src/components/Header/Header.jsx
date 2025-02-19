@@ -6,6 +6,7 @@ import { FaBox } from "react-icons/fa";
 import { FaRegCreditCard } from "react-icons/fa";
 import logo from "../../assets/icons/idZ3IrJ-df_1739656568667.svg";
 import App2 from "../Input/Input";
+
 import { FaFacebookSquare } from "react-icons/fa";
 import { IoIosCloseCircle } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -39,6 +40,7 @@ const Products = () => {
   const [ratingFilter, setRatingFilter] = useState("Default");
   const navigate = useNavigate();
   const carouselRef = useRef(null);
+  const [loadingi, setLoadinge] = useState(true);
 
 
   const handlePhoneChanges = (e) => {
@@ -199,7 +201,7 @@ const Products = () => {
         <div className="carousel-container">
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px" }}>
             <h2>Рекомендуем</h2>
-            <p style={{ cursor: "pointer", color: "white", fontWeight: "bold", marginRight: "10px" }} onClick={() => navigate("/products")}>Все товары</p>
+            <p style={{ cursor: "pointer", color: "white", fontWeight: "bold", marginRight: "40px" }} onClick={() => navigate("/products")}>Все товары</p>
           </div>
           <button className="carousel-btn left" onClick={scrollLeft}><FaChevronLeft color="#006dfd" /></button>
           <div className="carousel" ref={carouselRef}>
@@ -226,8 +228,8 @@ const Products = () => {
                       </div>
                       <p className='reviews'>19 отзывов</p>
                     </div>
-                    <p className='skidka'><del>{product.price * 13000} сум</del></p>
-                    <p className='prices'>{product.price * 13000 / 2} сум</p>
+                    <p className='skidka'><del>{Math.floor(product.price * 13000)} сум</del></p>
+                    <p className="prices">{Math.floor(product.price * 13000 / 2)} сум</p>
                     <div className='pricess'>
                       250.000 сум x 12 мес
                     </div>
@@ -267,7 +269,20 @@ const Products = () => {
               navigate(`/product/${product.id}`);
             }} className="product" key={product.id}>
               <div>
-                <img className="product-image" src={product.thumbnail} alt={product.title} />
+                <div>
+                  {/* Agar loading true bo‘lsa, "Yuklanmoqda..." chiqadi */}
+                  {loadingi && <p style={{color: "black"}}>Yuklanmoqda...</p>}
+
+                  {/* Rasm yuklanganda loading false bo‘lishi uchun onLoad qo‘shildi */}
+                  <img
+                    className="product-image"
+                    src={product.thumbnail}
+                    alt={product.title}
+                    onLoad={() => setLoadinge(false)} // Rasm yuklangandan keyin loading o‘chadi
+                    onError={() => setLoadinge(false)} // Agar rasm yuklanmasa ham loading o‘chadi
+                  />
+
+                </div>
                 <div className='btnsss'>
                   <button onClick={() => setheart(heart + 1)} className='heart'><FaHeart size={20} /></button>
                   <button className='scale'><RiScales3Fill size={30} /></button>
@@ -286,8 +301,8 @@ const Products = () => {
                   </div>
                   <p className='reviews'>19 отзывов</p>
                 </div>
-                <p className='skidka'><del>{product.price * 13000} сум</del></p>
-                <p className='prices'>{product.price * 13000 / 2} сум</p>
+                <p className='skidka'><del>{Math.floor(product.price * 13000)} сум</del></p>
+                <p className='prices'>{Math.floor(product.price * 13000 / 2)} сум</p>
                 <div className='pricess'>
                   250.000 сум x 12 мес
                 </div>
@@ -328,8 +343,6 @@ const Products = () => {
             color="black"
           />
           <div className="discount">
-
-
             <div className="login-left">
               <h3>Вход или создать личный кабинет</h3>
               <form>
@@ -389,6 +402,7 @@ const Products = () => {
                       </p>
                     </div>
                   </div>
+
                   <div className="card1">
                     <FaRegCreditCard color="#006dfd" size={40} />
                     <div>

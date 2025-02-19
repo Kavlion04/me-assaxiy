@@ -217,6 +217,8 @@ header nav {
 .carousel-container {
     margin: 20px auto;
     width: 90%;
+    height: 60vh;
+
 }
 
 .carousel-item {
@@ -250,7 +252,7 @@ header nav {
 }
 
 .carousel {
-    height: 50vh;
+    height: 60vh;
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
@@ -357,6 +359,8 @@ h3 {
 }
 h2 {
     color: white;
+    margin-left: 10px;
+    margin-top: 10px;
 }
 .left {
     left: 0;

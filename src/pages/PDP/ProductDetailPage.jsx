@@ -6,7 +6,6 @@ import { FaBasketShopping } from "react-icons/fa6";
 import { FaShoppingCart, FaTruck, FaStar, FaRegHeart, FaHeart } from "react-icons/fa";
 import { RiScales3Fill } from "react-icons/ri";
 const ProductDetailPage = () => {
-
   const { id } = useParams();
   const [product, setProduct] = useState({})
   useEffect(() => {
