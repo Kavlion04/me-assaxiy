@@ -1,0 +1,125 @@
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background-color: #fcfbfb;
+    color: #8b8582;
+}
+.info {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 10px;
+}
+.contact {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 10px;
+}
+.social {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 10px;
+}
+.delivery {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 10px;
+}
+footer b {
+    color: #272b34;
+    font-size: 20px;
+    font-weight: 600;
+}
+.cards {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 10px;
+}
+.payment {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 10px;
+}
+.cards2 {
+    display: grid;
+    align-items: center;
+    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+}
+.cards button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 140px;
+    height: 60px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    padding: 20px;
+    font-family: "Exo", sans-serif;
+    font-weight: 500;
+    background-color: #f3f2f7;
+    border-radius: 10px;
+    border: none;
+}
+
+.social button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    padding: 10px;
+    font-family: "Exo", sans-serif;
+    font-weight: 500;
+    background-color: #f3f2f7;
+    border-radius: 10px;
+    border: none;
+}
+
+.social2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.delivery button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    padding: 10px;
+    width: 250px;
+    height: 50px;
+    font-family: "Open-sans", sans-serif;
+    font-weight: 600;
+    background-color: #f3f2f7;
+    border-radius: 5px;
+    border: none;
+}
+.delivery button:hover {
+    color: blue;
+}
+.copy {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 40px;
+    color: #8b8582;
+    font-weight: 500;
+}
