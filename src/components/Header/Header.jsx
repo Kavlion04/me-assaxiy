@@ -6,7 +6,7 @@ import { FaBox } from "react-icons/fa";
 import { FaRegCreditCard } from "react-icons/fa";
 import logo from "../../assets/icons/idZ3IrJ-df_1739656568667.svg";
 import App2 from "../Input/Input";
-
+import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 import { FaFacebookSquare } from "react-icons/fa";
 import { IoIosCloseCircle } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -23,6 +23,7 @@ import api from "../../API/index";
 import { FaChevronRight } from "react-icons/fa";
 import { FaChevronLeft } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
+import { useStateValues } from "../../pages/About/AboutFavorite";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -31,7 +32,6 @@ const Products = () => {
   const [count, setCount] = useState(0);
   const [heart, setHeart] = useState(0);
   const [open, setOpen] = useState(false);
-  const [modalopen, setModalOpen] = useState(false);
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -42,6 +42,28 @@ const Products = () => {
   const carouselRef = useRef(null);
   const [loadingi, setLoadinge] = useState(true);
 
+
+
+  const handleAddToCart = (product) => {
+    setLikedProducts((prev) => ({
+      ...prev,
+      [product.id]: !prev[product.id], 
+    }));
+
+    setCount((prev) => (likedProducts[product.id] ? prev - 1 : prev + 1)); 
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (likedProducts[product.id]) {
+      const updatedCart = cart.filter((item) => item.id !== product.id);
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+    } else {
+      localStorage.setItem("cart", JSON.stringify([...cart, product]));
+    }
+  };
+  useEffect(() => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    setCount(cart.length);
+  }, []);
 
   const handlePhoneChanges = (e) => {
     const rawValue = e.target.value.replace(/\D/g, "");
@@ -88,6 +110,17 @@ const Products = () => {
     setPhone(formattedValue);
     setError(formattedValue.length < 19); // To‘liq kiritilmasa xato chiqarish
   };
+  // const haandleAddFavorite = (product) => {
+  //   const isSomeWishlist = wishlist.some((item) => item.id === product.id)
+  //   if(isSomeWishlist) {
+  //     setWishlist(wishlist.filter((item) => item.id !== product.id))
+
+  //   }else {
+
+  //     setWishlist((prev) => [...prev, product])
+  //   }
+
+  // }
 
   const filteredProducts = () => {
     let sortedProducts = [...products];
@@ -147,11 +180,9 @@ const Products = () => {
           </p>
 
         </div>
-        <div className='navv-1'>
+        <div className='navv-1' onClick={() => navigate("/cart")}>
           <SlBasket className='icon' size={20} />
-          <p >
-            Корзина
-          </p>
+          <p>Корзина</p>
           <button className='navv-1-btn'>{count}</button>
         </div>
         <div className='navv-1'>
@@ -159,7 +190,7 @@ const Products = () => {
           <p>
             Избранное
           </p>
-          <button className='navv-1-btn'>{heart}</button>
+          <button className='navv-1-btn'>0</button>
         </div>
         <div className='navv-1'>
           <div>
@@ -236,13 +267,23 @@ const Products = () => {
                     <div className='btni'>
                       <button className='btn1'>Купить в один клик</button>
                       <button
-                        onClick={() => { handleLike(product.id) }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAddToCart(product);
+                          
+                          if (!likedProducts[product.id]) {
+                            setCount(count + 1);
+                          } else {
+                            setCount(count - 1);
+                          }
+                        }}
                         className="btns"
                       >
 
                         {likedProducts[product.id] ? (
 
-                          <FaHeart color='red' size={20} />
+                          <MdOutlineRemoveShoppingCart size={20} color="black" />
+
                         ) : (
                           <MdOutlineShoppingCart color='white' size={20} />
 
@@ -271,7 +312,7 @@ const Products = () => {
               <div>
                 <div>
                   {/* Agar loading true bo‘lsa, "Yuklanmoqda..." chiqadi */}
-                  {loadingi && <p style={{color: "black"}}>Yuklanmoqda...</p>}
+                  {loadingi && <p style={{ color: "black" }}>Yuklanmoqda...</p>}
 
                   {/* Rasm yuklanganda loading false bo‘lishi uchun onLoad qo‘shildi */}
                   <img
@@ -284,7 +325,7 @@ const Products = () => {
 
                 </div>
                 <div className='btnsss'>
-                  <button onClick={() => setheart(heart + 1)} className='heart'><FaHeart size={20} /></button>
+                  <button className='heart'><FaHeart size={20} /></button>
                   <button className='scale'><RiScales3Fill size={30} /></button>
                 </div>
               </div>
@@ -309,16 +350,24 @@ const Products = () => {
                 <div className='btni'>
                   <button className='btn1'>Купить в один клик</button>
                   <button
-                    onClick={() => { handleLike(product.id) }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(product);
+                      if (!likedProducts[product.id]) {
+                        setCount(count + 1);
+                      } else {
+                        setCount(count - 1);
+                      }
+                    }}
                     className="btns"
                   >
 
                     {likedProducts[product.id] ? (
 
-                      <FaHeart color='red' size={20} />
+                      <MdOutlineRemoveShoppingCart color="black" size={20} />
+
                     ) : (
                       <MdOutlineShoppingCart color='white' size={20} />
-
                     )}
 
                   </button>
@@ -351,7 +400,7 @@ const Products = () => {
                   id="phone"
                   type="text"
                   value={phone}
-                  onChange={handlePhoneChanges}
+
                   placeholder="+998 (__) ___-__-__"
                   maxLength={19}
                   style={{

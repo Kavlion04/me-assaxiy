@@ -1,13 +1,15 @@
 import "./Modal.css"
-const ModalWrapper = ({children, onClose}) => {
+const ModalWrapper = ({ children, open, onClose }) => {
+
+  
   return (
     <>
-    <div onClick={onClose} className="modal-overlay">
+      <div onClick={onClose} className="modal-overlay">
 
-    </div>
-    <div className="modal-content">
-      <div>{children}</div>
-    </div>
+      </div>
+      <div className="modal-content">
+        <div>{children}</div>
+      </div>
     </>
   )
 }

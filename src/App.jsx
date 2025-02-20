@@ -3,16 +3,27 @@ import Layout from './components/Layout/index';
 // import Modal from "./pages/PDM/ProductDetailModal"
 import Product from "./pages/PDP/ProductDetailPage";
 import NotFound from "./components/Not-found/index"
+import ProductDetailModal from './pages/PDM/ProductDetailModal';
+import Cart from './pages/Cart/index';
+import { CartProvider } from './context';
+
+
+
 const App = () => {
   return (
-    <>
+    <CartProvider>
       <Routes>
         <Route path="/" element={<Layout />}>
+        
         </Route>
         <Route path='product/:id' element={<Product />} onClick={(e) => e.stopPropagation()} />
+        <Route path='/' element={<ProductDetailModal />}></Route>
+        <Route path="/cart" element={<Cart />} /> 
         <Route path='*' element={<NotFound />} />
+        
+        
       </Routes>
-    </>
+    </CartProvider>
 
   )
 }
