@@ -30,7 +30,7 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [likedProducts, setLikedProducts] = useState({});
   const [count, setCount] = useState(0);
-  const [heart, setHeart] = useState(0);
+  const [heart, setheart] = useState(0);
   const [open, setOpen] = useState(false);
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
@@ -190,7 +190,7 @@ const Products = () => {
           <p>
             Избранное
           </p>
-          <button className='navv-1-btn'>0</button>
+          <button className='navv-1-btn'>{heart}</button>
         </div>
         <div className='navv-1'>
           <div>
@@ -311,21 +311,27 @@ const Products = () => {
             }} className="product" key={product.id}>
               <div>
                 <div>
-                  {/* Agar loading true bo‘lsa, "Yuklanmoqda..." chiqadi */}
                   {loadingi && <p style={{ color: "black" }}>Yuklanmoqda...</p>}
-
-                  {/* Rasm yuklanganda loading false bo‘lishi uchun onLoad qo‘shildi */}
                   <img
                     className="product-image"
                     src={product.thumbnail}
                     alt={product.title}
-                    onLoad={() => setLoadinge(false)} // Rasm yuklangandan keyin loading o‘chadi
-                    onError={() => setLoadinge(false)} // Agar rasm yuklanmasa ham loading o‘chadi
+                    onLoad={() => setLoadinge(false)} 
+                    onError={() => setLoadinge(false)} 
                   />
 
                 </div>
                 <div className='btnsss'>
-                  <button className='heart'><FaHeart size={20} /></button>
+                  <button onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddToCart(product);
+                    if (!likedProducts[product.id]) {
+                      setCount(count + 1);
+                    } else {
+                      setCount(count - 1);
+                    }
+
+                  }} className='heart'><FaHeart size={20} /></button>
                   <button className='scale'><RiScales3Fill size={30} /></button>
                 </div>
               </div>

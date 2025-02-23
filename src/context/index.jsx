@@ -4,7 +4,7 @@ export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
-  const [message, setMessage] = useState(""); // Xabar uchun state
+  const [message, setMessage] = useState(""); 
 
   const toggleCartItem = (product) => {
     const exists = cart.find((item) => item.id === product.id);
@@ -17,7 +17,7 @@ export const CartProvider = ({ children }) => {
       setMessage(`${product.title} savatchaga qo‘shildi.`);
     }
 
-    setTimeout(() => setMessage(""), 3000); // Xabarni 3 soniyadan keyin o‘chirish
+    setTimeout(() => setMessage(""), 3000); 
   };
 
   return (

@@ -1,90 +1,106 @@
 import React, { useState, useEffect } from 'react';
-import { FaHeart, FaStar } from 'react-icons/fa6';
-import { RiScales3Fill } from 'react-icons/ri';
+import { MdOutlineDiscount } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import "./index.css";
-import likedProducts from "../../components/Header/Header"
-import handleAddToCart from "../../components/Header/Header"
-import { MdOutlineRemoveShoppingCart, MdOutlineShoppingCart } from 'react-icons/md';
+import { CiHeart } from "react-icons/ci";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import notprocuct from "../../assets/images/basket_no_page.webp";
+import Footer from '../../components/Footer/index';
+import CartHeader from '../../components/Header2/index';
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        // LocalStorage'dan cart ma'lumotlarini olish
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
-        setCartItems(cart);
+        setCartItems(cart.map(item => ({ ...item, count: item.count || 1 })));
     }, []);
 
+    // Mahsulot sonini o'zgartirish
+    const updateCount = (id, newCount) => {
+        if (newCount < 1) return;
+        const updatedCart = cartItems.map(item =>
+            item.id === id ? { ...item, count: newCount } : item
+        );
+        setCartItems(updatedCart);
+        localStorage.setItem("cart", JSON.stringify(updatedCart)); // LocalStorage'ni yangilash
+    };
+
     return (
-        <div >
-            <h1>Ваши товары в корзине</h1>
+        <div>
+            <CartHeader />
             <div className='cart'>
                 {cartItems.length > 0 ? (
                     cartItems.map((item) => (
                         <div key={item.id}>
-                            <ul className='product-lists'>
+                            <ul className='product-lists sss'>
+                                <li onClick={() => navigate(`/product/${item.id}`)} className="surfic">
+                                    <img className="product-image" src={item.thumbnail} alt={item.title} />
 
-
-                                <li onClick={() => navigate(`/product/${item.id}`)} className="product" key={item.id}>
-                                    <div>
-                                        <img className="product-image" src={item.thumbnail} alt={item.title} />
-                                        <div className='btnsss'>
-                                            <button onClick={() => setheart(heart + 1)} className='heart'><FaHeart size={20} /></button>
-                                            <button className='scale'><RiScales3Fill size={30} /></button>
-                                        </div>
-                                    </div>
-                                    <div className="product-info">
-                                        <button className='btna'>Супер цена</button>
+                                    <div className='alls-p'>
                                         <p className='titles'>{item.title}</p>
-                                        <div className='stars'>
-                                            <div>
-                                                <FaStar className="rating" size={15} color="orange" />
-                                                <FaStar className="rating" size={15} color="orange" />
-                                                <FaStar className="rating" size={15} color="orange" />
-                                                <FaStar className="rating" size={15} color="orange" />
-                                                <FaStar className="rating" size={15} color="orange" />
-                                            </div>
-                                            <p className='reviews'>19 отзывов</p>
-                                        </div>
+                                        <p className='description'>{item.brand}</p>
+                                        <button className='surfic-btn'>{item.category}</button>
+                                    </div>
+
+                                    <div className='count-box' onClick={(e) => e.stopPropagation()}>
+                                        <button onClick={() => updateCount(item.id, item.count - 1)}>-</button>
+                                        <p>{item.count}</p>
+                                        <button onClick={() => updateCount(item.id, item.count + 1)}>+</button>
+                                    </div>
+
+                                    <div className='all-p'>
                                         <p className='skidka'><del>{Math.floor(item.price * 13000)} сум</del></p>
                                         <p className="prices">{Math.floor(item.price * 13000 / 2)} сум</p>
                                         <div className='pricess'>
-                                            250.000 сум x 12 мес
+                                            {Math.floor(item.price * 13000 / 6) * item.count} сум  x 12 мес
                                         </div>
-                                        <div className='btni'>
-                                            <button className='btn1'>Купить в один клик</button>
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleAddToCart(item);
-                                                    setCount(count + 1);
-                                                }}
-                                                className="btns"
-                                            >
-
-                                                {likedProducts[item.id] ? (
-
-                                                    <MdOutlineRemoveShoppingCart size={20} color="black" />
-
-                                                ) : (
-                                                    <MdOutlineShoppingCart color='white' size={20} />
-
-                                                )}
-
-                                            </button>
-                                        </div>
-
+                                    </div>
+                                    <div className='dvi-ss'>
+                                        <CiHeart size={15} color='gray' />
+                                        <button className='delete' onClick={(e) => {
+                                            e.stopPropagation();
+                                            const updatedCart = cartItems.filter((i) => i.id !== item.id);
+                                            setCartItems(updatedCart);
+                                            localStorage.setItem("cart", JSON.stringify(updatedCart));
+                                        }}><RiDeleteBin5Line size={15} color='gray' /></button>
                                     </div>
                                 </li>
                             </ul>
                         </div>
                     ))
                 ) : (
-                    <p>Корзина пуста</p>
+                    <div className='not'>
+                        <img src={notprocuct} alt="" />
+                        <b>В вашей корзине пока нет товаров</b>
+                        <p>Начните с основ или найдите продукт с помощью функции поиска.</p>
+                        <button className='btn' onClick={() => navigate("/")}>Начать покупки</button>
+                    </div>
                 )}
+
+
+                {cartItems.length > 0 && (
+                    <>
+                        <div className='fixed'>
+                            <div className='fixe'>
+                                <p>В корзине {cartItems.length} товара</p>
+                                <MdOutlineDiscount title='скидка' size={25} />
+                            </div>
+                            <p className='sum'>
+                                Общая сумма: <span>
+                                    {Math.floor(cartItems.reduce((total, item) => total + item.price * item.count * 13000 / 2, 0))} сум
+                                </span>
+                            </p>
+                            <hr className='hr' />
+                            <button onClick={() => navigate("/payment")} className='bta'>Оформить</button>
+                            <button onClick={() => navigate("/")} className='bta '>Добавить еще</button>
+                        </div>
+                    </>
+                )}
+
             </div>
+            <Footer />
         </div>
     );
 };
