@@ -5,17 +5,14 @@ import App2 from "../Input/Input";
 import { RiScales3Fill } from "react-icons/ri";
 import { SlCreditCard, SlBasket } from "react-icons/sl";
 import { FaTruck } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import uzbFlag from "../../assets/icons/—Pngtree—uzbekistan flag png with transparent_6742219.png";
 import { CiUser } from "react-icons/ci";
-
-import { FaShoppingCart,  FaStar, FaRegHeart, FaHeart } from "react-icons/fa";
-
-
-
+import {  FaRegHeart } from "react-icons/fa";
+import cartItems from '../../pages/Cart/index';
+import { useNavigate } from 'react-router-dom';
 
 const CartHeader = () => {
+    const navigate = useNavigate();
     return (
         <div>
             <div className='header-top'>
@@ -47,7 +44,7 @@ const CartHeader = () => {
                 <div className='navv-1' onClick={() => navigate("/cart")}>
                     <SlBasket className='icon' size={20} />
                     <p>Корзина</p>
-                    <button className='navv-1-btn'>{}</button>
+                    <button className='navv-1-btn'>{cartItems.length}</button>
                 </div>
                 <div className='navv-1'>
                     <FaRegHeart className='icon' size={20} />

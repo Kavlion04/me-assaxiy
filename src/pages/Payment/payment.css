@@ -1,0 +1,302 @@
+.form-container {
+    max-width: 70vw;
+    height: auto;
+    margin: 20px;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+.label {
+    display: block;
+    font-size: 18px;
+    font-family: "Open-sans";
+    font-weight: 500;
+    color: #c2c6cb;
+    margin-bottom: 4px;
+}
+.forsi {
+    display: flex;
+    width: 100%;
+    background-color: #f3f2f7;
+    height: 80px;
+    border: none;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    margin-bottom: 10px;
+
+}
+.payment-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #ccc;
+    width: 200px;
+    padding: 20px;
+    border-radius: 15px;
+    height: auto;
+}
+
+.extra-payment-options {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+
+}
+.extra-payment-option2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #ccc;
+    width: 200px;
+    padding: 20px;
+    border-radius: 15px;
+    height: auto;
+}
+.forsi p {
+    display: flex;
+    align-items: center;
+}
+h1 {
+    margin-left: 20px;
+}
+.forsr {
+    display: flex;
+    gap: 10px;
+}
+.forsr label {
+    font-size: 18px;
+    font-family: "Open-sans";
+    font-weight: 600;
+    color: #333;
+}
+.forsr label span {
+    color: #0056b3;
+    cursor: pointer;
+    font-weight: 600;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+.sumbit {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+.fors {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+.fors label {
+    font-size: 18px;
+    font-family: "Open-sans";
+    font-weight: 500;
+    color: #c2c6cb;
+}
+
+.ttte {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+.ttte label {
+    font-size: 18px;
+    font-family: "Open-sans";
+    font-weight: 500;
+    color: #c2c6cb;
+}
+.qqqq {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+.qqqq label {
+    font-size: 18px;
+    font-family: "Open-sans";
+    font-weight: 500;
+    color: #c2c6cb;
+}
+.forss {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.forss label {
+    font-size: 18px;
+    font-family: "Open-sans";
+    font-weight: 500;
+    color: #c2c6cb;
+}
+.qqqq textarea {
+    height: 100px;
+    font-size: 18px;
+    font-family: "Open-sans";
+    font-weight: 500;
+    color: #c2c6cb;
+    border: 1px solid #ccc;
+}
+.ttte textarea {
+    height: 60px;
+    font-size: 18px;
+    font-family: "Open-sans";
+    font-weight: 500;
+    color: #c2c6cb;
+    border: 1px solid #ccc;
+}
+.delivery {
+    width: 300px;
+    height: 200px;
+    border: none;
+    border-radius: 15px;
+    padding: 15px;
+    background-color: #eee;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.input,
+.select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+.form-row {
+    display: flex;
+    margin-bottom: 16px;
+    gap: 20px;
+}
+.form-row div {
+    flex: 1;
+}
+.error-text {
+    color: red;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+
+.submit-button {
+    padding: 10px 20px;
+    background-color: #fe7200;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.submit-button:hover {
+    background-color: orange;
+}
+.back {
+    color: #fe7200;
+    background-color: transparent;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+}
+.back:hover {
+    background-color: #fe7200;
+    color: white;
+    border-radius: 4px;
+}
+
+
+.Cje {
+    margin-right: 20px;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.active {
+    background-color: transparent;
+    border: 1px solid #0056b3;
+}
+ 
+.fors {
+    margin-top: 20px;
+    flex-direction: column;
+}
+.input {
+    outline: #0056b3;
+}
+.modal-content {
+    position: relative;
+    max-width: 400px;
+    width: 100%;
+    top: -260px;
+    right: -300px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.close-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.close-button:hover {
+    background-color: #218838;
+}
+.chala {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+.first-text {
+    font-size: 20px;
+    color: #007bff;
+    cursor: pointer;
+    font-weight: bold;
+}
+.chala p {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.slld {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.for {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

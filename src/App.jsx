@@ -6,6 +6,7 @@ import NotFound from "./components/Not-found/index"
 import ProductDetailModal from './pages/PDM/ProductDetailModal';
 import Cart from './pages/Cart/index';
 import { CartProvider } from './context';
+import Payment from "./pages/Payment/index"
 
 
 
@@ -20,6 +21,7 @@ const App = () => {
         <Route path='/' element={<ProductDetailModal />}></Route>
         <Route path="/cart" element={<Cart />} /> 
         <Route path='*' element={<NotFound />} />
+        <Route path='/payment' element={<Payment />} />
         
         
       </Routes>
