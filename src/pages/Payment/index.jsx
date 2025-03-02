@@ -1,4 +1,4 @@
-import { useForm, FormProvider, set } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { useState, useEffect } from "react";
 import "./payment.css";
 import { IoCardOutline } from "react-icons/io5";
@@ -6,13 +6,10 @@ import { FaCheck } from "react-icons/fa";
 import PAymentHeader from "../../components/Header2/index";
 import PaymentFooter from "../../components/Footer/index";
 import PaymentCrud from "../../components/CRUDD/Crud";
-import PaymentCart from "../../pages/Cart/index";
-import cartItems from "../../pages/Cart/index";
 import { TbCards } from "react-icons/tb";
 import { FaRegUserCircle } from "react-icons/fa";
-import masterVisa from "../../assets/images/visa-master.webp";
-import humoUzcard from "../../assets/images/humo-uzcard.webp";
-import dddd from "../../assets/images//free-icon-empty-archive-13982857.png"
+import cartItems from "../Cart/index"
+
 export default function App() {
   const methods = useForm();
   const { register, handleSubmit, formState: { errors } } = methods;
@@ -21,8 +18,6 @@ export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [active, setActive] = useState(false);
   const [actives, setActives] = useState(false);
-  const [address, setAddress] = useState('')
-  const [opens, setOpens] = useState(false);
 
   const regions = {
     "Toshkent": ["Chilonzor", "Yunusobod", "Mirzo Ulug‘bek", "Bektemir", "Sergeli"],
@@ -45,7 +40,6 @@ export default function App() {
     setRegion(selectedRegion);
     setCityOptions(regions[selectedRegion] || []);
 
-    // Viloyat tanlangan bo'lsa, qo'shimcha dostavka blokini ko'rsatish
     setIsSecondDeliveryVisible(selectedRegion !== "");
   };
 
@@ -80,45 +74,37 @@ export default function App() {
       forsiDiv.addEventListener("click", function () {
         const extraDivs = document.querySelector(".extra-payment-options");
 
-        // Agar qo'shimcha divlar bor bo'lsa, olib tashlaymiz va `.forsi` ni tiklaymiz
         if (extraDivs) {
           extraDivs.remove();
           forsiDiv.style.border = "none";
           return;
         }
 
-        // `.forsi` divning stilini o'zgartirish
         forsiDiv.style.border = "1px solid #ccc";
         forsiDiv.style.background = "transparent";
 
-        // Yangi div container yaratamiz
         const newDivContainer = document.createElement("div");
         newDivContainer.className = "extra-payment-options";
 
-        // 1-chi qo‘shimcha div (UzCard, Humo)
         const extraDiv1 = document.createElement("div");
         extraDiv1.className = "payment-option";
         extraDiv1.innerHTML = `
           <img src={humoUzcard} alt="Humo UzCard" />
         `;
 
-        // 2-chi qo‘shimcha div (Visa, MasterCard)
         const extraDiv2 = document.createElement("div");
         extraDiv2.className = " extra-payment-option2";
         extraDiv2.innerHTML = `
           <img src="../../assets/images/visa-master.webp" alt="Visa MasterCard" />
         `;
 
-        // Yangi divlarni containerga qo‘shish
         newDivContainer.appendChild(extraDiv1);
         newDivContainer.appendChild(extraDiv2);
 
-        // Asosiy `.forsi` divining pastiga qo'shish
         forsiDiv.after(newDivContainer);
       });
     }
   }, []);
-
 
   return (
     <>
@@ -130,7 +116,7 @@ export default function App() {
             <div className="form-row">
 
               <div>
-                <label className="label">Телефон *</label>
+                <label className="label">Телефон <span style={{ color: "red" }}>*</span></label>
                 <input
                   type="text"
                   {...register("phone", { required: true })}
@@ -141,7 +127,7 @@ export default function App() {
                 {errors.phone && <span className="error-text">Telefon raqami majburiy</span>}
               </div>
               <div>
-                <label className="label">ФИО *</label>
+                <label className="label">ФИО <span style={{ color: "red" }}>*</span></label>
                 <input
                   type="text"
                   {...register("fullName", { required: true })}
@@ -180,7 +166,7 @@ export default function App() {
             <div className="form-row">
 
               <div>
-                <label className="label">Регион *</label>
+                <label className="label">Регион <span style={{ color: "red" }}> *</span></label>
                 <select
                   {...register("region", { required: true })}
                   className="select"
@@ -195,7 +181,7 @@ export default function App() {
               </div>
 
               <div>
-                <label className="label">Город *</label>
+                <label className="label">Город <span style={{ color: "red" }}>*</span></label>
                 <select {...register("city", { required: true })} className="select">
                   <option value="">Выбрать</option>
                   {cityOptions.map((city) => (
@@ -303,30 +289,31 @@ export default function App() {
 
           <>
             <div className='fixed chala'>
-              <p className="first-text">В корзине {cartItems.length} товара</p>
+              <p className="first-text">В корзине {cartItems} товара</p>
+              {console.log(cartItems.count)}
 
               <div className="slld">
                 <p className='sum'>
                   Цена товара
                 </p>
                 <span>
-                  {cartItems.price * cartItems.count * 13000 / 2}
+                  {isNaN(cartItems.price * cartItems.count * 13000 / 2) ? 0 : cartItems.price * cartItems.count * 13000 / 2}
+                  
                 </span>
               </div>
               <p className="sum">
                 Цена доставки <span>{active ? 30000 : 0} сум</span>
               </p>
               <p className="sum">
-                Общая сумма <span>{cartItems.price * cartItems.count * 13000 + (active ? 30000 : 0)}</span>
+                Общая сумма <span>{isNaN(cartItems.price * cartItems.count * 13000 + (active ? 30000 : 0)) ? 0 : cartItems.price * cartItems.count * 13000 + (active ? 30000 : 0)}</span>
               </p>
             </div>
           </>
 
         </>
-        {/* Modal */}
         {isModalOpen && (
           <div className="modal">
-            <div className="modal-content">
+            <div className="modal-content2">
               <p>✅ Спасибо, ваш заказ принял</p>
               <button className="close-button" onClick={() => setIsModalOpen(false)}>OK</button>
             </div>

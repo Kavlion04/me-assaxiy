@@ -10,6 +10,7 @@ import { FaYoutube } from "react-icons/fa";
 import { FaWifi } from "react-icons/fa";
 import { FaAngleRight } from "react-icons/fa";
 import "./Footer.css";
+import { t } from "i18next";
 
 
 
@@ -20,42 +21,42 @@ const Footer = () => {
 
 
                 <div className='info'>
-                    <b>Информация</b>
-                    <p>Часто задаваемые вопросы</p>
-                    <p>Новости</p>
-                    <p>Блог</p>
-                    <p>Наши бренды</p>
-                    <p>Карьера в Asaxiy </p>
-                    <p>Оферта для рассрочки</p>
-                    <p>О нас</p>
-                    <p>Карта Сайта</p>
+                    <b>{t("Информация")}</b>
+                    <p>{t("Часто задаваемые вопросы")}</p>
+                    <p>{t("Новости")}</p>
+                    <p>{t("Блог")}</p>
+                    <p>{t("Наши бренды")}</p>
+                    <p>{t("Карьера в Asaxiy ")}</p>
+                    <p>{t("Оферта для рассрочки")}</p>
+                    <p>{t("О нас")}</p>
+                    <p>{t("Карта Сайта")}</p>
                 </div>
                 <div className='contact'>
 
                     <div>
-                        <b>Для связи</b>
-                        <p>Телефон: +998 71 200 01 05</p>
-                        <p>info@asaxiy.uz</p>
-                        <p>Telegram bot</p>
-                        <p>Улица Чиланзар 45/2, Ташкент</p>
+                        <b>{t("Для связи")}</b>
+                        <p>{t("Телефон: +998 71 200 01 05")}</p>
+                        <p>{t("info@asaxiy.uz")}</p>
+                        <p>{t("Telegram bot")}</p>
+                        <p>{t("Улица Чиланзар 45/2, Ташкент")}</p>
                     </div>
                     <div>
-                        <b>Программы лояльности</b>
-                        <p>Статус "El-yurt ishonchi"</p>
-                        <p>"Asaxiy plus"</p>
+                        <b>{t("Программы лояльности")}</b>
+                        <p>{t("Статус \"El-yurt ishonchi\"")}"</p>
+                        <p>{t("Оферта 'Asaxiy plus'")}</p>
                         <p>Оферта "Asaxiy plus"</p>
                     </div>
                 </div>
                 <div className='delivery'>
-                    <b>Доставка и магазины</b>
-                    <button><AiOutlineShop size={20} />Наши Магазины <FaAngleRight /></button>
-                    <button><FaMapLocationDot size={20} />Пункты выдачи <FaAngleRight /></button>
-                    <button><FaTruckFast  size={20}/>Доставка <FaAngleRight /></button>
+                    <b>{t("Доставка и магазины")}</b>
+                    <button><AiOutlineShop size={20} />{t("Наши Магазины ")} <FaAngleRight /></button>
+                    <button><FaMapLocationDot size={20} />{t("Пункты выдачи ")}<FaAngleRight /></button>
+                    <button><FaTruckFast  size={20}/> {t("Доставка ")}<FaAngleRight /></button>
                 </div>
                 <div className='payment'>
 
                     <div className='cards'>
-                        <b>Виды оплаты</b>
+                        <b>{t("Виды оплаты")}</b>
                         <div className='cards2'>
                             <button>< FaCcMastercard size={30} /></button>
                             <button><FaCcVisa size={30} /></button>
@@ -67,7 +68,7 @@ const Footer = () => {
                     </div>
                     <div className='social'>
                         <b>
-                            Мы в соц. сетях
+                            {t("Мы в соц. сетях")}
                         </b>
                         <div className='social2'>
                             <FaFacebook size={30} />
@@ -80,7 +81,7 @@ const Footer = () => {
                 </div>
             </div>
             <p className='copy'>
-                2015 - 2025 Интернет-магазин asaxiy.uz: Бытовая техника и др. Доставка товаров осуществляется во все регионы. Все права защищены.
+                {t("2015 - 2025 Интернет-магазин asaxiy.uz: Бытовая техника и др. Доставка товаров осуществляется во все регионы. Все права защищены.")}
             </p>
 
         </footer>

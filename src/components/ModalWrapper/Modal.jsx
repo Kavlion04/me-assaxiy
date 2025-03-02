@@ -1,5 +1,5 @@
 import "./Modal.css"
-const ModalWrapper = ({ children, open, onClose }) => {
+const ModalWrapper = ({ children, open, onClose,  }) => {
 
   
   return (

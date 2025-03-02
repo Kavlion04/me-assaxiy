@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, memo } from "react";
 import "./Header.css";
 import { FaBoxesPacking } from "react-icons/fa6";
 import { FaTruckFast } from "react-icons/fa6";
@@ -11,7 +11,7 @@ import { FaFacebookSquare } from "react-icons/fa";
 import { IoIosCloseCircle } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RiScales3Fill } from "react-icons/ri";
-import { FaShoppingCart, FaTruck, FaStar, FaRegHeart, FaHeart } from "react-icons/fa";
+import { FaTruck, FaStar, FaRegHeart, FaHeart } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { SlCreditCard, SlBasket } from "react-icons/sl";
 import { CiUser } from "react-icons/ci";
@@ -23,7 +23,7 @@ import api from "../../API/index";
 import { FaChevronRight } from "react-icons/fa";
 import { FaChevronLeft } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
-import { useStateValues } from "../../pages/About/AboutFavorite";
+import { useTranslation } from "react-i18next";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -32,8 +32,6 @@ const Products = () => {
   const [count, setCount] = useState(0);
   const [heart, setheart] = useState(0);
   const [open, setOpen] = useState(false);
-  const [phone, setPhone] = useState("");
-  const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("All");
   const [priceFilter, setPriceFilter] = useState("Default");
@@ -41,16 +39,18 @@ const Products = () => {
   const navigate = useNavigate();
   const carouselRef = useRef(null);
   const [loadingi, setLoadinge] = useState(true);
+  const [phone, setPhone] = useState("+998 (__) ___-__-__");
+  const [error, setError] = useState(false);
+  const [epen, setEpen] = useState(false);
+  const { t, i18n } = useTranslation();
 
-
-
-  const handleAddToCart = (product) => {
+  const handleAddToCart = useCallback((product) => {
     setLikedProducts((prev) => ({
       ...prev,
-      [product.id]: !prev[product.id], 
+      [product.id]: !prev[product.id],
     }));
 
-    setCount((prev) => (likedProducts[product.id] ? prev - 1 : prev + 1)); 
+    setCount((prev) => (likedProducts[product.id] ? prev - 1 : prev + 1));
 
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     if (likedProducts[product.id]) {
@@ -59,23 +59,43 @@ const Products = () => {
     } else {
       localStorage.setItem("cart", JSON.stringify([...cart, product]));
     }
-  };
-  useEffect(() => {
+  }, [likedProducts]);
+
+  const fetchCartCount = useCallback(() => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     setCount(cart.length);
   }, []);
 
+  useEffect(() => {
+    fetchCartCount();
+  }, [fetchCartCount]);
+
+
   const handlePhoneChanges = (e) => {
-    const rawValue = e.target.value.replace(/\D/g, "");
-    let formattedValue = "+998 ";
+    let value = e.target.value.replace(/\D/g, "");
 
-    if (rawValue.length > 2) formattedValue += `(${rawValue.slice(2, 4)}) `;
-    if (rawValue.length > 4) formattedValue += `${rawValue.slice(4, 7)}-`;
-    if (rawValue.length > 7) formattedValue += `${rawValue.slice(7, 9)}-`;
-    if (rawValue.length > 9) formattedValue += rawValue.slice(9, 11);
+    if (value.startsWith("998")) {
+      value = value.slice(3);
+    }
 
-    setPhone(formattedValue);
-    setError(rawValue.length < 4);
+    if (value.length > 9) {
+      value = value.slice(0, 9);
+    }
+
+    let formattedPhone = "+998 (";
+    formattedPhone += value.slice(0, 2); // (XX
+    formattedPhone += value.length >= 2 ? ") " : ""; // ) qo‘shiladi
+    formattedPhone += value.slice(2, 5); // XXX
+    formattedPhone += value.length >= 5 ? "-" : ""; // - qo‘shiladi
+    formattedPhone += value.slice(5, 7); // XX
+    formattedPhone += value.length >= 7 ? "-" : ""; // - qo‘shiladi
+    formattedPhone += value.slice(7, 9); // XX
+
+    while (formattedPhone.length < 19) {
+      formattedPhone += "_";
+    }
+
+    setPhone(formattedPhone);
   };
 
 
@@ -86,41 +106,32 @@ const Products = () => {
       carouselRef.current.scrollLeft -= 300;
     }
   };
-
-
-
-
   const scrollRight = () => {
     if (carouselRef.current) {
       carouselRef.current.scrollLeft += 300;
     }
   };
-  useEffect(() => {
+  const fetchProducts = useCallback(() => {
     setLoading(true);
     api
-      .get(`products`, { params: { limit: 194 } })
+      .get("products", { params: { limit: 194 } })
       .then((res) => setProducts(res.data.products))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
+
+
 
   const handlePhoneChange = (e) => {
     const rawValue = e.target.value;
     const formattedValue = formatPhoneNumber(rawValue);
 
     setPhone(formattedValue);
-    setError(formattedValue.length < 19); // To‘liq kiritilmasa xato chiqarish
+    setError(formattedValue.length < 19);
   };
-  // const haandleAddFavorite = (product) => {
-  //   const isSomeWishlist = wishlist.some((item) => item.id === product.id)
-  //   if(isSomeWishlist) {
-  //     setWishlist(wishlist.filter((item) => item.id !== product.id))
-
-  //   }else {
-
-  //     setWishlist((prev) => [...prev, product])
-  //   }
-
-  // }
 
   const filteredProducts = () => {
     let sortedProducts = [...products];
@@ -156,73 +167,77 @@ const Products = () => {
     <header>
       <div className='header-top'>
         <img src={logo} alt="" />
-        <button className='burger'><GiHamburgerMenu />Категории</button>
+        <button className='burger'><GiHamburgerMenu />{t("Категории")}</button>
         <App2 value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)} width={'400px'} />
         <div className='navv-1'>
           <RiScales3Fill className='icon' size={20} />
           <p>
-            Сравнение
+            {t("Сравнение")}
           </p>
 
         </div>
         <div className='navv-1'>
           <SlCreditCard className='icon' size={20} />
           <p>
-            Оплатить
+            {t("Оплатить")}
           </p>
 
         </div>
         <div className='navv-1'>
           <FaTruck className='icon' size={20} />
           <p>
-            Отследить
+            {t("Отследить")}
           </p>
 
         </div>
         <div className='navv-1' onClick={() => navigate("/cart")}>
           <SlBasket className='icon' size={20} />
-          <p>Корзина</p>
+          <p>{t("Корзина")}</p>
           <button className='navv-1-btn'>{count}</button>
         </div>
         <div className='navv-1'>
           <FaRegHeart className='icon' size={20} />
           <p>
-            Избранное
+            {t("Избранное")}
           </p>
           <button className='navv-1-btn'>{heart}</button>
         </div>
-        <div className='navv-1'>
-          <div>
+        <div className=" dropdown">
+          <button className="dropbtn">
             <img width={20} height={20} src={uzbFlag} alt="" />
+            <p>{i18n.language}</p>
+          </button>
+          <div className="dropdown-content">
+            <div className="lang">
+              <button onClick={() => {i18n.changeLanguage('uz')}} className="actives" >uzbek</button>
+              <button onClick={() => {i18n.changeLanguage('en')}} className="actives">english</button>
+              <button onClick={() => {i18n.changeLanguage('ru')}} className="actives">russian</button>
+            </div>
           </div>
-          <p>
-            o'zbekcha
-          </p>
-
         </div>
         <div onClick={() => setOpen(true)} className='navv-1'>
           <CiUser className='icon' size={20} />
           <p>
-            Войти
+            {t("Войти")}
           </p>
         </div>
 
         <nav>
           <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className="filter-name filter">
-            <option value="All">All</option>
+            <option value="All">{t("Все")}</option>
             <option value="A-Z">A-Z</option>
             <option value="Z-A">Z-A</option>
           </select>
           <select value={priceFilter} onChange={(e) => setPriceFilter(e.target.value)} className="filter-price filter">
-            <option value="Default">Default</option>
-            <option value="Low to High(price)">Low to High(price)</option>
-            <option value="High to Low(price)">High to Low(price)</option>
+            <option value="Default">{t("по умолчанию")}</option>
+            <option value="Low to High(price)">{t("От низкой до высокой (цена)")}</option>
+            <option value="High to Low(price)">{t("От высокой до низкой (цена)")}</option>
           </select>
           <select value={ratingFilter} onChange={(e) => setRatingFilter(e.target.value)} className="filter-rating filter">
-            <option value="Default">Default</option>
-            <option value="1 to 5">1 to 5</option>
-            <option value="5 to 1">5 to 1</option>
+            <option value="Default">{t("по умолчанию")}</option>
+            <option value="1 to 5">{t("от 1 до 5")}</option>
+            <option value="5 to 1">{t("от 5 до 1")}</option>
           </select>
 
         </nav>
@@ -231,8 +246,8 @@ const Products = () => {
       <div>
         <div className="carousel-container">
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px" }}>
-            <h2>Рекомендуем</h2>
-            <p style={{ cursor: "pointer", color: "white", fontWeight: "bold", marginRight: "40px" }} onClick={() => navigate("/products")}>Все товары</p>
+            <h2>{t("Популярные")}</h2>
+            <p style={{ cursor: "pointer", color: "white", fontWeight: "bold", marginRight: "40px" }} onClick={() => navigate("/products")}>{t("Все товары")}</p>
           </div>
           <button className="carousel-btn left" onClick={scrollLeft}><FaChevronLeft color="#006dfd" /></button>
           <div className="carousel" ref={carouselRef}>
@@ -247,7 +262,7 @@ const Products = () => {
                     </div>
                   </div>
                   <div className="product-info">
-                    <button className='btna'>Супер цена</button>
+                    <button className='btna'>{t("Супер цена")}</button>
                     <p className='titles'>{product.title}</p>
                     <div className='stars'>
                       <div>
@@ -257,20 +272,20 @@ const Products = () => {
                         <FaStar className="rating" size={15} color="orange" />
                         <FaStar className="rating" size={15} color="orange" />
                       </div>
-                      <p className='reviews'>19 отзывов</p>
+                      <p className='reviews'>{t("19 отзывов")}</p>
                     </div>
-                    <p className='skidka'><del>{Math.floor(product.price * 13000)} сум</del></p>
-                    <p className="prices">{Math.floor(product.price * 13000 / 2)} сум</p>
+                    <p className='skidka'><del>{Math.floor(product.price * 13000)} {t("сум")}</del></p>
+                    <p className="prices">{Math.floor(product.price * 13000 / 2)} {t("сум")}</p>
                     <div className='pricess'>
-                      250.000 сум x 12 мес
+                      250.000 {t("сум")} x 12 {t("месацев")}
                     </div>
                     <div className='btni'>
-                      <button className='btn1'>Купить в один клик</button>
+                      <button className='btn1'>{t("Купить в один клик")}</button>
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           handleAddToCart(product);
-                          
+
                           if (!likedProducts[product.id]) {
                             setCount(count + 1);
                           } else {
@@ -311,13 +326,13 @@ const Products = () => {
             }} className="product" key={product.id}>
               <div>
                 <div>
-                  {loadingi && <p style={{ color: "black" }}>Yuklanmoqda...</p>}
+                  {loadingi && <p style={{ color: "black" }}>😊</p>}
                   <img
                     className="product-image"
                     src={product.thumbnail}
                     alt={product.title}
-                    onLoad={() => setLoadinge(false)} 
-                    onError={() => setLoadinge(false)} 
+                    onLoad={() => setLoadinge(false)}
+                    onError={() => setLoadinge(false)}
                   />
 
                 </div>
@@ -336,7 +351,7 @@ const Products = () => {
                 </div>
               </div>
               <div className="product-info">
-                <button className='btna'>Супер цена</button>
+                <button className='btna'>{t("Супер цена")}</button>
                 <p className='titles'>{product.title}</p>
                 <div className='stars'>
                   <div>
@@ -346,15 +361,15 @@ const Products = () => {
                     <FaStar className="rating" size={15} color="orange" />
                     <FaStar className="rating" size={15} color="orange" />
                   </div>
-                  <p className='reviews'>19 отзывов</p>
+                  <p className='reviews'>{t("19 отзывов")}</p>
                 </div>
-                <p className='skidka'><del>{Math.floor(product.price * 13000)} сум</del></p>
-                <p className='prices'>{Math.floor(product.price * 13000 / 2)} сум</p>
+                <p className='skidka'><del>{Math.floor(product.price * 13000)} {t("сум")}</del></p>
+                <p className='prices'>{Math.floor(product.price * 13000 / 2)} {t("сум")}</p>
                 <div className='pricess'>
-                  250.000 сум x 12 мес
+                  250.000 {t("сум")} x 12 {t("месацев")}
                 </div>
                 <div className='btni'>
-                  <button className='btn1'>Купить в один клик</button>
+                  <button className='btn1'>{t("Купить в один клик")}</button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -399,15 +414,14 @@ const Products = () => {
           />
           <div className="discount">
             <div className="login-left">
-              <h3>Вход или создать личный кабинет</h3>
+              <h3>{t("Вход или создать личный кабинет")}</h3>
               <form>
-                <label htmlFor="phone">Телефон</label>
+                <label htmlFor="phone">{t("Телефон")}</label>
                 <input
                   id="phone"
                   type="text"
                   value={phone}
-
-                  placeholder="+998 (__) ___-__-__"
+                  onChange={handlePhoneChanges}
                   maxLength={19}
                   style={{
                     width: "100%",
@@ -420,8 +434,8 @@ const Products = () => {
                 />
                 {error && <p style={{ color: "red", fontSize: "12px" }}>Не верный формат</p>}
               </form>
-              <button className="btne">Получить код активации</button>
-              <p className="or">или</p>
+              <button className="btne">{t("Получить код активации")}</button>
+              <p className="or">{t("или")}</p>
               <div className="socials">
                 <button className="google"><FaGoogle /></button>
                 <button className="face"><FaFacebookSquare />
@@ -434,26 +448,26 @@ const Products = () => {
                   <div className="card1">
                     <FaBoxesPacking color="#006dfd" size={40} />
                     <div>
-                      <b>Больше не нужно ходить на базар</b>
-                      <p>У нас выгодные цены и доставка до дома
+                      <b>{t("Больше не нужно ходить на базар")}</b>
+                      <p>{t("У нас выгодные цены и доставка до дома")}
                       </p>
                     </div>
                   </div>
                   <div className="card1">
                     <FaTruckFast color="#006dfd" size={40} />
                     <div>
-                      <b>Быстрая доставка</b>
-                      <p>delivery
-                        Наш сервис удивит вас
+                      <b>{t("Быстрая доставка")}</b>
+                      <p>
+                        {t("Наш сервис удивит вас")}
                       </p>
                     </div>
                   </div>
                   <div className="card1">
                     <FaBox color="#006dfd" size={40} />
                     <div>
-                      <b>Удобства для вас</b>
+                      <b>{t("Удобства для вас")}</b>
                       <p>
-                        Быстрое оформление и гарантия на возврат в случае неисправности
+                        {t("Быстрое оформление и гарантия на возврат в случае неисправности")}
                       </p>
                     </div>
                   </div>
@@ -461,9 +475,9 @@ const Products = () => {
                   <div className="card1">
                     <FaRegCreditCard color="#006dfd" size={40} />
                     <div>
-                      <b>Рассрочка</b>
+                      <b>{t("Рассрочка")}</b>
                       <p>
-                        Без предоплаты на 3, 6 или 12 месяцев
+                        {t("Без предоплаты на 3, 6 или 12 месяцев")}
                       </p>
                     </div>
                   </div>
@@ -475,26 +489,13 @@ const Products = () => {
           </div>
         </ModalWrapper>
       )
-
       }
-      {/* {modalopen && (
-        <ModalWrapper open={modalopen} onClose={() => setModalOpen(false)}>
-          <div className="discount">
-            <div className="login-left">
-              
-              <h3>Вход или создать личный кабинет</h3>
 
 
-            </div>
-          </div>
-        </ModalWrapper>
-      )
-
-      } */}
     </header>
   )
 }
 
-export default Products;
+export default memo(Products);
 
 

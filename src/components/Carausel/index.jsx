@@ -6,12 +6,12 @@ import "./swiper.css";
 import { Navigation } from "swiper/modules";
 
 export default function App() {
-    const [products, setProducts] = useState([]); // API-dan ma'lumotlarni saqlash uchun state
+    const [products, setProducts] = useState([]); 
 
     useEffect(() => {
-        fetch("https://dummyjson.com/products")
+        api.get("/products")
             .then((res) => res.json())
-            .then((data) => setProducts(data.products)) // Faqat `products` massivini olish
+            .then((data) => setProducts(data.products))
             .catch((error) => console.error("Error fetching data:", error));
     }, []);
 
